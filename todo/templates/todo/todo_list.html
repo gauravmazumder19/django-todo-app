@@ -1,0 +1,27 @@
+{% extends 'todo/base.html' %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+<h1>Todo List</h1>
+<a href="{% url 'todo_create' %}" class="btn btn-primary mb-3">Add Todo</a>
+<ul class="list-group">
+    {% for todo in todos %}
+        <li class="list-group-item">
+            {% if todo.completed %}
+                <s>{{ todo.title }}</s>
+            {% else %}
+                {{ todo.title }}
+            {% endif %}
+            <a href="{% url 'todo_update' todo.pk %}" class="btn btn-secondary btn-sm float-right ml-2">Edit</a>
+            <form action="{% url 'todo_toggle_complete' todo.pk %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm float-right ml-2">
+                    {% if todo.completed %}Undo{% else %}Done{% endif %}
+                </button>
+            </form>
+            <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger btn-sm float-right">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
